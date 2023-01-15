@@ -74,25 +74,101 @@ int scene_run() {
 
 }
 
+// class
+// input(int msg)
+// function:
+// 1. menu_destroy
+// 2. virtural 要 override 實作init
+// 3. 找到那個圖的某一個座標，可以藉由這個座標，去放箭頭
+// 4. virtural 要 override 實作擺放箭頭
+
+class State{
+public:
+    void destructor(){
+        menu_destroy();
+    }
+
+    int site(){
+        if(msg_state == MSG_GAME_START) return 0;
+        else if(msg_state == MSG_CHANGE_SETTING) return 1;
+        else if(msg_state == MSG_TERMINATE) return 2;
+        else if(msg_state == MSG_ABOUT) return 3;
+    }
+
+    virtual void State_init(){};
+    virtual void Scene_state(){} ;
+
+
+private:
+    int msg_state;
+};
+
+class GAME_START : public State{
+public:
+    virtual void State_init() override{
+        game_init();
+    }
+
+    virtual void Scene_state() override {
+        scene_state = SCENE_GAME;
+    } 
+};
+
+class CHANGE_SETTING : public State{
+public:
+    virtual void State_init() override{
+        about_init();
+    }
+
+    virtual void Scene_state() override {
+        scene_state = SCENE_SETTING;
+    } 
+};
+
+class ABOUT : public State{
+public:
+    virtual void State_init() override{
+        setting_init();
+    }
+
+    virtual void Scene_state() override {
+        scene_state = SCENE_ABOUT;
+    } 
+};
+
 int scene_process(ALLEGRO_EVENT event) {
     int msg;
+    
     if (scene_state == SCENE_MENU) {
         msg = menu_process(event);
         // printf("final\n");
         if (msg == MSG_GAME_START) {
-            menu_destroy();
-            scene_state = SCENE_GAME;
-            game_init();
+            GAME_START now_state;
+            now_state.Scene_state();
+            now_state.State_init();
+            
+
+            // menu_destroy();
+            // scene_state = SCENE_GAME;
+            // game_init();
         } else if (msg == MSG_CHANGE_SETTING) {
-            menu_destroy();
-            scene_state = SCENE_SETTING;
-            setting_init();
+            CHANGE_SETTING now_state;
+            now_state.Scene_state();
+            now_state.State_init();
+            
+            // menu_destroy();
+            // scene_state = SCENE_SETTING;
+            // setting_init();
         } else if (msg == MSG_TERMINATE) {
             return MSG_TERMINATE;
         } else if (msg == MSG_ABOUT) {
-            menu_destroy();
-            scene_state = SCENE_ABOUT;
-            about_init();
+            ABOUT now_state;
+            now_state.Scene_state();
+            now_state.State_init();
+            
+            // menu_destroy();
+            // scene_state = SCENE_ABOUT;
+            // about_init();
         }
     } else if (scene_state == SCENE_GAME) {
         msg = game_process(event);

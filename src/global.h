@@ -1,8 +1,9 @@
 #pragma once
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <math.h>
+// #include <time.h>
+// #include <stdlib.h>
+#include<bits/stdc++.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
@@ -11,6 +12,7 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "../algif5/src/algif.h"
+using namespace std;
 
 enum {
     MSG_TERMINATE,
